@@ -26,8 +26,7 @@ unsigned int frequency = 0;
 
 SPI_VFD vfd(5, 6, 7);
 
-void setup()
-{
+void setup() {
   pinMode (DigitalOutSignal, OUTPUT);
   attachInterrupt(0, assignFreq, RISING);
   pinMode (Rotary1,INPUT);
