@@ -42,6 +42,7 @@ void setup()
   vfd.display();
   // set up the VFD's number of columns and rows: 
   vfd.begin(20, 2);
+  vfd.clear();
 }
 
 void loop() {
@@ -57,7 +58,6 @@ void loop() {
     unsigned int val = 0;
     unsigned int inDec = 0;
     slot = 0;
-    vfd.clear();
     for (int j = 0; j < 4; j++) {
       val = digitalRead(rotaryPins[j]);
       inDec = val << j;
