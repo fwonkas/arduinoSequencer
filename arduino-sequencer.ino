@@ -18,8 +18,7 @@ volatile unsigned int slot = 0;
 unsigned int selSlot = 0;
 volatile unsigned int steps[] = {40,80,160,320,40,80,160,320,40,80,160,320,40,80,160,320};
 unsigned int rotaryPins[] = {Rotary1, Rotary2, Rotary4, Rotary8};
-//unsigned int numSteps = sizeof(steps) / sizeof(int);
-unsigned int numSteps = sizeof(steps) >> 5;
+unsigned int numSteps = sizeof(steps) / sizeof(int);
 unsigned int duration = 50;
 unsigned int pitchval = 1;
 unsigned int tempo = 100;
@@ -49,7 +48,7 @@ void loop() {
   
   frequency = map(analogRead(FrequencyIn), 0, 1023, 20, 2047);
   
-  for (int i = 0; i < 16; i++) {
+  for (int i = 0; i < numSteps; i++) {
     tempo = analogRead(TempoIn);
     duration = map(analogRead(DurationIn), 0, 1023, 1, tempo);
     digitalWrite(LED, HIGH);
