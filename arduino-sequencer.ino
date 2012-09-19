@@ -30,6 +30,7 @@ void setup()
 {
   pinMode (DigitalOutSignal, OUTPUT);
   attachInterrupt(0, assignFreq, RISING);
+  pinMode (Rotary1,INPUT);
   pinMode (Rotary2,INPUT);
   pinMode (Rotary4,INPUT);
   pinMode (Rotary8,INPUT);
