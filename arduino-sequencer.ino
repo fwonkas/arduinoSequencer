@@ -23,7 +23,6 @@ unsigned int duration = 50;
 unsigned int pitchval = 40;
 unsigned int tempo = 100;
 unsigned int frequency = 0;
-unsigned long displayInterval = millis();
 
 SPI_VFD vfd(5, 6, 7);
 
@@ -58,12 +57,12 @@ void loop() {
     unsigned int inDec = 0;
     slot = 0;
     vfd.clear();
-    displayInterval = millis();
     for (int j = 0; j < 4; j++) {
       val = digitalRead(rotaryPins[j]);
       inDec = val << j;
       slot += (inDec);
     }
+    slot = getRotaryValue();
     vfd.setCursor(0,0);
     vfd.print("Slot: ");
     vfd.print(slotOrder[slot]);
