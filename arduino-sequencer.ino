@@ -45,33 +45,34 @@ void setup() {
 }
 
 void loop() {
-  
-  frequency = map(analogRead(FrequencyIn), 0, 1023, 20, 2047);
-  
   for (int i = 0; i < numSteps; i++) {
-    tempo = analogRead(TempoIn);
-    duration = map(analogRead(DurationIn), 0, 1023, 1, tempo);
+    tempo = roundDown(map(analogRead(TempoIn), 0, 1023, 0, 1000));
+    duration = roundDown(map(analogRead(DurationIn), 0, 1023, 0, tempo));
     digitalWrite(LED, HIGH);
     tone(DigitalOutSignal, steps[i], duration);
     digitalWrite(LED, LOW);
     slot = getRotaryValue();
     vfd.setCursor(0,0);
     vfd.print("Slot: ");
-    vfd.print(slotOrder[slot]);
+    vfd.print(padding(slotOrder[slot], 2));
     vfd.print(":");
-    vfd.print(i);
+    vfd.print(padding(i, 2));
     vfd.setCursor(13, 0);
     vfd.print("F: ");
-    vfd.print(map(analogRead(FrequencyIn), 0, 1023, 40, 2047));
+    // This will likely result in some weird values. That is because I am
+    // rounding down before remapping to a range of 20-2047. The way
+    // I am rounding down is inaccurate for values > 1028, so I am rounding
+    // down the initial reading.
+    frequency = map(roundDown(analogRead(FrequencyIn)), 0, 1020, 20, 2047);
+    vfd.print(padding(frequency, 4));
     vfd.setCursor(0,1);
     vfd.print("D: ");
-    vfd.print(duration);
+    vfd.print(padding(duration, 4));
     vfd.setCursor(13, 1);
     vfd.print("T: ");
-    vfd.print(tempo);
+    vfd.print(padding(tempo, 4));
     delay(tempo);
   }
-
 }
 
 void assignFreq() {
@@ -87,4 +88,33 @@ unsigned int getRotaryValue() {
     value += digitalRead(rotaryPins[position]) << position;
   }
   return value;
+}
+
+String padding(int number, byte width) {
+  String value;
+  value = String("");
+  int currentMax = 10;
+  for (byte i=1; i < width; i++){
+    if (number < currentMax) {
+      value = String("0" + value);
+    }
+    currentMax *= 10;
+  }
+  return String(value + number);
+}
+
+unsigned int roundDown(unsigned int x) {
+  // This is a psychotic way to round an integer down to the nearest 10.
+  // It's also inaccurate starting at x == 1029, but we're only using values
+  // up to 1000 here.
+  // The idea here is to waste as little time as possible.
+  return multByTen(divByTen(x));
+}
+
+unsigned int divByTen(unsigned int x) {
+  return ((x << 7) + (x << 6) + (x << 3) + (x << 2) + (x << 0)) >> 11;
+}
+
+unsigned int multByTen(unsigned int x) {
+  return ((x << 3) + (x << 1));
 }
