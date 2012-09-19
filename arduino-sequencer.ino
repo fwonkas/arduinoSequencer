@@ -54,14 +54,6 @@ void loop() {
     digitalWrite(LED, HIGH);
     tone(DigitalOutSignal, steps[i], duration);
     digitalWrite(LED, LOW);
-    unsigned int val = 0;
-    unsigned int inDec = 0;
-    slot = 0;
-    for (int j = 0; j < 4; j++) {
-      val = digitalRead(rotaryPins[j]);
-      inDec = val << j;
-      slot += (inDec);
-    }
     slot = getRotaryValue();
     vfd.setCursor(0,0);
     vfd.print("Slot: ");
@@ -83,16 +75,16 @@ void loop() {
 }
 
 void assignFreq() {
-  unsigned int newSlot = 0;
-  unsigned int i = 0;
-  unsigned int val = 0;
-  unsigned int inDec = 0;
-  for (; i < 4; i++) {
-    val = digitalRead(rotaryPins[i]);
-    inDec = val << i;
-    newSlot += (inDec);
-  }
-  slot = newSlot;
+  slot = getRotaryValue();
   unsigned int frq = map(analogRead(FrequencyIn), 0, 1023, 40, 2047);
   steps[slotOrder[slot]] = frq;
+}
+
+unsigned int getRotaryValue() {
+  unsigned int position = 0;
+  unsigned int value = 0;
+  for (; position < 4; position++) {
+    value += digitalRead(rotaryPins[position]) << position;
+  }
+  return value;
 }
