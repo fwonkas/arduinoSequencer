@@ -13,7 +13,7 @@
 #define AssignFrequency 2
 #define LED 13
 
-unsigned int slotOrder[] = {0, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+unsigned int slotOrder[] = {7, 6, 5, 4, 3, 2, 1, 0, 15, 14, 13, 12, 11, 10, 9, 8};
 volatile unsigned int slot = 0;
 unsigned int selSlot = 0;
 volatile unsigned int steps[] = {40,80,160,320,40,80,160,320,40,80,160,320,40,80,160,320};
