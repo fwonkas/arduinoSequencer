@@ -73,7 +73,8 @@ void loop() {
 
 void assignFreq() {
   slot = getRotaryValue();
-  unsigned int frq = map(analogRead(FrequencyIn), 0, 1023, 40, 2047);
+//  unsigned int frq = map(analogRead(FrequencyIn), 0, 1023, 40, 2047);
+  unsigned int frq = roundDown(map(analogRead(FrequencyIn), 0, 1020, 0, 2047));
   steps[slotOrder[slot]] = frq;
 }
 
