@@ -100,15 +100,7 @@ String padding(int number, byte width) {
 }
 
 unsigned int roundDown(unsigned int x) {
-  // This is a psychotic way to round an integer down to the nearest 10.
-  // It's also inaccurate starting at x == 1029, but we're only using values
-  // up to 1000 here.
-  // The idea here is to waste as little time as possible.
-  return multByTen(divByTen(x));
-}
-
-unsigned int divByTen(unsigned int x) {
-  return ((x << 7) + (x << 6) + (x << 3) + (x << 2) + (x << 0)) >> 11;
+  return multByTen(x / 10);
 }
 
 unsigned int multByTen(unsigned int x) {
