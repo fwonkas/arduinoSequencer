@@ -46,6 +46,7 @@ void setup() {
 
 void loop() {
   for (int i = 0; i < numSteps; i++) {
+    frequency = roundDown(map(analogRead(FrequencyIn), 0, 1020, 0, 2047));
     tempo = roundDown(map(analogRead(TempoIn), 0, 1023, 0, 1000));
     duration = roundDown(map(analogRead(DurationIn), 0, 1023, 0, tempo));
     digitalWrite(LED, HIGH);
@@ -59,11 +60,6 @@ void loop() {
     vfd.print(padding(i, 2));
     vfd.setCursor(13, 0);
     vfd.print("F: ");
-    // This will likely result in some weird values. That is because I am
-    // rounding down before remapping to a range of 20-2047. The way
-    // I am rounding down is inaccurate for values > 1028, so I am rounding
-    // down the initial reading.
-    frequency = map(roundDown(analogRead(FrequencyIn)), 0, 1020, 20, 2047);
     vfd.print(padding(frequency, 4));
     vfd.setCursor(0,1);
     vfd.print("D: ");
