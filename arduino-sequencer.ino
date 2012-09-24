@@ -48,7 +48,7 @@ void loop() {
   for (int i = 0; i < numSteps; i++) {
     frequency = roundDown(map(analogRead(FrequencyIn), 0, 1020, 0, 2047));
     tempo = roundDown(map(analogRead(TempoIn), 0, 1023, 0, 1000));
-    duration = roundDown(map(analogRead(DurationIn), 0, 1023, 0, tempo));
+    duration = roundDown(map(analogRead(DurationIn), 0, 1023, 1023, 10));
     digitalWrite(LED, HIGH);
     tone(DigitalOutSignal, steps[i], duration);
     digitalWrite(LED, LOW);
