@@ -21,9 +21,8 @@ volatile unsigned int slot = 0;
 volatile unsigned int steps[] = {40,80,160,320,40,80,160,320,40,80,160,320,40,80,160,320};
 unsigned int rotaryPins[] = {Rotary1, Rotary2, Rotary4, Rotary8};
 unsigned int numSteps = sizeof(steps) / sizeof(int);
-unsigned int duration = 50;
-unsigned int pitchval = 40;
-unsigned int tempo = 100;
+unsigned int duration = 1023;
+unsigned int tempo = 0;
 unsigned int frequency = 0;
 
 SPI_VFD vfd(5, 6, 7);
@@ -39,7 +38,7 @@ void setup() {
   Serial.begin(9600);
   vfd.noDisplay();
   delay(500);
-   // Turn on the display:
+  // Turn on the display:
   vfd.display();
   // set up the VFD's number of columns and rows: 
   vfd.begin(20, 2);
