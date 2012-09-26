@@ -1,4 +1,5 @@
 #include <SPI_VFD.h>
+#include <TimerOne.h>
 
 #define DurationIn A0
 #define FrequencyIn A1
@@ -14,8 +15,9 @@
 #define LED 13
 
 unsigned int slotOrder[] = {7, 6, 5, 4, 3, 2, 1, 0, 15, 14, 13, 12, 11, 10, 9, 8};
+unsigned int currentSlot = 0;
+unsigned int nextSlot;
 volatile unsigned int slot = 0;
-unsigned int selSlot = 0;
 volatile unsigned int steps[] = {40,80,160,320,40,80,160,320,40,80,160,320,40,80,160,320};
 unsigned int rotaryPins[] = {Rotary1, Rotary2, Rotary4, Rotary8};
 unsigned int numSteps = sizeof(steps) / sizeof(int);
@@ -42,33 +44,39 @@ void setup() {
   // set up the VFD's number of columns and rows: 
   vfd.begin(20, 2);
   vfd.clear();
+  updateDisplay();
+  Timer1.initialize(50000/3);
+  Timer1.attachInterrupt(updateDisplay);
 }
 
 void loop() {
-  for (int i = 0; i < numSteps; i++) {
-    frequency = roundDown(map(analogRead(FrequencyIn), 0, 1020, 0, 2047));
-    tempo = roundDown(map(analogRead(TempoIn), 0, 1023, 0, 1000));
-    duration = roundDown(map(analogRead(DurationIn), 0, 1023, 1023, 10));
-    digitalWrite(LED, HIGH);
-    tone(DigitalOutSignal, steps[i], duration);
-    digitalWrite(LED, LOW);
-    slot = getRotaryValue();
-    vfd.setCursor(0,0);
-    vfd.print("Slot: ");
-    vfd.print(padding(slotOrder[slot], 2));
-    vfd.print(":");
-    vfd.print(padding(i, 2));
-    vfd.setCursor(13, 0);
-    vfd.print("F: ");
-    vfd.print(padding(frequency, 4));
-    vfd.setCursor(0,1);
-    vfd.print("D: ");
-    vfd.print(padding(duration, 4));
-    vfd.setCursor(13, 1);
-    vfd.print("T: ");
-    vfd.print(padding(tempo, 4));
-    delay(tempo);
-  }
+  digitalWrite(LED, HIGH);
+  tone(DigitalOutSignal, steps[currentSlot], duration);
+  digitalWrite(LED, LOW);
+  nextSlot = currentSlot + 1;
+  currentSlot = (nextSlot == numSteps) ? 0 : nextSlot;
+  delay(tempo);
+}
+
+void updateDisplay() {
+  frequency = roundDown(map(analogRead(FrequencyIn), 0, 1020, 0, 2047));
+  tempo = roundDown(map(analogRead(TempoIn), 0, 1023, 0, 1000));
+  duration = roundDown(map(analogRead(DurationIn), 0, 1023, 1023, 10));
+  slot = getRotaryValue();
+  vfd.setCursor(0,0);
+  vfd.print("Slot: ");
+  vfd.print(padding(slotOrder[slot], 2));
+  vfd.print(":");
+  vfd.print(padding(currentSlot, 2));
+  vfd.setCursor(13, 0);
+  vfd.print("F: ");
+  vfd.print(padding(frequency, 4));
+  vfd.setCursor(0,1);
+  vfd.print("D: ");
+  vfd.print(padding(duration, 4));
+  vfd.setCursor(13, 1);
+  vfd.print("T: ");
+  vfd.print(padding(tempo, 4));
 }
 
 void assignFreq() {
