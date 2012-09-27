@@ -5,11 +5,11 @@
 #define FrequencyIn A1
 #define TempoIn A2
 #define Rotary1 8
-#define Rotary2 9
+#define Rotary2 12
 #define Rotary4 10
 #define Rotary8 11
 #define ENC_PORT PINC
-#define DigitalOutSignal 12
+#define DigitalOutSignal 9
 
 #define AssignFrequency 2
 #define LED 13
