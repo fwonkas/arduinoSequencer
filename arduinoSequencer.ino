@@ -45,6 +45,8 @@ void setup() {
 }
 
 void loop() {
+  getPots();
+  updateDisplay();
   digitalWrite(LED, HIGH);
   tone(DigitalOutSignal, steps[currentSlot], duration);
   digitalWrite(LED, LOW);
@@ -53,10 +55,13 @@ void loop() {
   delay(tempo);
 }
 
-void updateDisplay() {
+void getPots() {
   frequency = roundDown(map(analogRead(FrequencyIn), 0, 1020, 0, 2047));
   tempo = roundDown(map(analogRead(TempoIn), 0, 1023, 0, 1000));
   duration = roundDown(map(analogRead(DurationIn), 0, 1023, 1023, 10));
+}
+
+void updateDisplay() {
   slot = getRotaryValue();
   vfd.setCursor(0,0);
   vfd.print("Slot: ");
