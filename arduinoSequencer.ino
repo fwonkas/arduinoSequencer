@@ -23,6 +23,7 @@ unsigned int numSteps = sizeof(steps) / sizeof(int);
 unsigned int duration = 1023;
 unsigned int tempo = 0;
 unsigned int frequency = 0;
+unsigned int timeLeft = 0;
 
 SPI_VFD vfd(5, 6, 7);
 
@@ -52,7 +53,16 @@ void loop() {
   digitalWrite(LED, LOW);
   nextSlot = currentSlot + 1;
   currentSlot = (nextSlot == numSteps) ? 0 : nextSlot;
-  delay(tempo);
+  timeLeft = tempo;
+  while (timeLeft > 100) {
+    getPots();
+    updateDisplay();
+    timeLeft -= 100;
+    delay(100);
+  }
+  if (timeLeft > 0) {
+    delay(timeLeft);
+  }
 }
 
 void getPots() {
