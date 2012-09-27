@@ -13,6 +13,8 @@
 #define AssignFrequency 2
 #define LED 13
 
+#define NumReadings 10
+
 unsigned int slotOrder[] = {7, 6, 5, 4, 3, 2, 1, 0, 15, 14, 13, 12, 11, 10, 9, 8};
 unsigned int currentSlot = 0;
 unsigned int nextSlot;
@@ -24,6 +26,16 @@ unsigned int duration = 1023;
 unsigned int tempo = 0;
 unsigned int frequency = 0;
 unsigned int timeLeft = 0;
+
+unsigned int durations[NumReadings];
+unsigned int tempos[NumReadings];
+unsigned int frequencies[NumReadings];
+
+unsigned int totalDurations = 0;
+unsigned int totalTempos = 0;
+unsigned int totalFrequencies = 0;
+
+unsigned int index = 0;
 
 SPI_VFD vfd(5, 6, 7);
 
@@ -66,9 +78,25 @@ void loop() {
 }
 
 void getPots() {
-  frequency = roundDown(map(analogRead(FrequencyIn), 0, 1020, 0, 2047));
-  tempo = roundDown(map(analogRead(TempoIn), 0, 1023, 0, 1000));
-  duration = roundDown(map(analogRead(DurationIn), 0, 1023, 1023, 10));
+  totalDurations -= durations[index];
+  totalTempos -= tempos[index];
+  totalFrequencies -= frequencies[index];
+  durations[index] = roundDown(map(analogRead(DurationIn), 0, 1020, 1020, 10));
+  tempos[index] = roundDown(map(analogRead(TempoIn), 0, 1020, 0, 1000));
+  frequencies[index] = roundDown(map(analogRead(FrequencyIn), 0, 1020, 0, 2047));
+  totalDurations += durations[index];
+  totalTempos += tempos[index];
+  totalFrequencies += frequencies[index];
+  index += 1;
+  if (index >= NumReadings) {
+    index = 0;
+  }
+  duration = totalDurations / NumReadings;
+  tempo = totalTempos / NumReadings;
+  frequency = totalFrequencies / NumReadings;
+  //frequency = roundDown(map(analogRead(FrequencyIn), 0, 1020, 0, 2047));
+  //tempo = roundDown(map(analogRead(TempoIn), 0, 1023, 0, 1000));
+  //duration = roundDown(map(analogRead(DurationIn), 0, 1023, 1023, 10));
 }
 
 void updateDisplay() {
