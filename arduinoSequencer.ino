@@ -1,5 +1,4 @@
 #include <SPI_VFD.h>
-#include <TimerOne.h>
 
 #define DurationIn A0
 #define FrequencyIn A1
@@ -43,9 +42,6 @@ void setup() {
   // set up the VFD's number of columns and rows: 
   vfd.begin(20, 2);
   vfd.clear();
-  updateDisplay();
-  Timer1.initialize(50000/3);
-  Timer1.attachInterrupt(updateDisplay);
 }
 
 void loop() {
