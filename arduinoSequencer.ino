@@ -81,9 +81,9 @@ void getPots() {
   totalDurations -= durations[index];
   totalTempos -= tempos[index];
   totalFrequencies -= frequencies[index];
-  durations[index] = roundDown(map(analogRead(DurationIn), 0, 1020, 1020, 10));
-  tempos[index] = roundDown(map(analogRead(TempoIn), 0, 1020, 0, 1000));
-  frequencies[index] = roundDown(map(analogRead(FrequencyIn), 0, 1020, 0, 2047));
+  durations[index] = roundDown(map(analogRead(DurationIn), 0, 1023, 1020, 0));
+  tempos[index] = roundDown(map(analogRead(TempoIn), 0, 1023, 0, 1000));
+  frequencies[index] = roundDown(map(analogRead(FrequencyIn), 0, 1023, 0, 2047));
   totalDurations += durations[index];
   totalTempos += tempos[index];
   totalFrequencies += frequencies[index];
@@ -91,9 +91,9 @@ void getPots() {
   if (index >= NumReadings) {
     index = 0;
   }
-  duration = totalDurations / NumReadings;
-  tempo = totalTempos / NumReadings;
-  frequency = totalFrequencies / NumReadings;
+  duration = max(10, roundDown(totalDurations / NumReadings));
+  tempo = roundDown(totalTempos / NumReadings);
+  frequency = roundDown(totalFrequencies / NumReadings);
   //frequency = roundDown(map(analogRead(FrequencyIn), 0, 1020, 0, 2047));
   //tempo = roundDown(map(analogRead(TempoIn), 0, 1023, 0, 1000));
   //duration = roundDown(map(analogRead(DurationIn), 0, 1023, 1023, 10));
