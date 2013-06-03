@@ -126,6 +126,20 @@ void assignFreq() {
 unsigned int getRotaryValue() {
   unsigned int position = 0;
   unsigned int value = 0;
+  /**
+    * This may look a little confusing. All it's doing is checking each
+    * rotary pin. In position 0, it's grabbing the value (0 or 1)
+    * and multiplying it by 2^0. In position 1, it's multiplying by 2^1,
+    * and so on.
+    * It could be more clearly written as:
+    * 
+    * for (; position < 4; position++) {
+    *   value += digitalRead(rotaryPins[position]) * pow(2, position);
+    * }
+    * 
+    * But using bitshifting is faster.
+    */
+
   for (; position < 4; position++) {
     value += digitalRead(rotaryPins[position]) << position;
   }
@@ -133,6 +147,9 @@ unsigned int getRotaryValue() {
 }
 
 String padding(int number, byte width) {
+  /**
+    * Pad a number as a string.
+    */
   String value;
   value = String("");
   int currentMax = 10;
@@ -150,5 +167,9 @@ unsigned int roundDown(unsigned int x) {
 }
 
 unsigned int multByTen(unsigned int x) {
+  /**
+    * This is the equivalent to:
+    *   return (x * 10);
+    */
   return ((x << 3) + (x << 1));
 }
