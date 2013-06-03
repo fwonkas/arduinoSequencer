@@ -1,5 +1,6 @@
 #include <SPI_VFD.h>
 
+#define Version 0.1
 #define DurationIn A0
 #define FrequencyIn A1
 #define TempoIn A2
@@ -54,6 +55,11 @@ void setup() {
   vfd.display();
   // set up the VFD's number of columns and rows: 
   vfd.begin(20, 2);
+  vfd.clear();
+  vfd.setCursor(0,0);
+  vfd.print("Arduino Sequencer v");
+  vfd.print(Version);
+  delay(3000);
   vfd.clear();
 }
 
