@@ -169,7 +169,17 @@ String padding(int number, byte width) {
 }
 
 unsigned int roundDown(unsigned int x) {
-  return multByTen(x / 10);
+  return multByTen(divByTen(x));
+}
+
+unsigned divByTen(unsigned int x) {
+  unsigned q = (x >> 1) + (x >> 2);
+  q += (q >> 4);
+  q += (q >> 8);
+  q += (q >> 16);
+  q = q >> 3;
+  x -= multByTen(q);
+  return q + ((x + 6) >> 4);
 }
 
 unsigned int multByTen(unsigned int x) {
