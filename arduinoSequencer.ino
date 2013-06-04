@@ -57,7 +57,7 @@ void setup() {
   vfd.begin(20, 2);
   vfd.clear();
   vfd.setCursor(0,0);
-  vfd.print("Arduino Sequencer v");
+  vfd.print("Arduino Seq v");
   vfd.print(Version);
   delay(3000);
   vfd.clear();
