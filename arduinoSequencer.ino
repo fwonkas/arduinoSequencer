@@ -53,7 +53,7 @@ void setup() {
   delay(500);
   // Turn on the display:
   vfd.display();
-  // set up the VFD's number of columns and rows: 
+  // set up the VFD's number of columns and rows:
   vfd.begin(20, 2);
   vfd.clear();
   vfd.setCursor(0,0);
@@ -138,11 +138,11 @@ unsigned int getRotaryValue() {
     * and multiplying it by 2^0. In position 1, it's multiplying by 2^1,
     * and so on.
     * It could be more clearly written as:
-    * 
+    *
     * for (; position < 4; position++) {
     *   value += digitalRead(rotaryPins[position]) * pow(2, position);
     * }
-    * 
+    *
     * But using bitshifting is faster.
     */
 
